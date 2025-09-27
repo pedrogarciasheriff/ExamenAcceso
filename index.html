@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Preguntas Aleatorias</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+        }
+        #generateBtn {
+            display: block;
+            margin: 10px auto 20px auto;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+        }
+        #questionsList {
+            flex: 1;
+            display: flex;
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .column {
+            flex: 1;
+            margin: 0 5px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centra horizontalmente */
+        }
+        .question {
+            margin-bottom: 12px;
+            text-align: center; /* Centra el texto de la pregunta y la respuesta */
+        }
+        .question b {
+            color: #333;
+        }
+        .answer {
+            margin-top: 5px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>Preguntas Aleatorias</h1>
+    <button id="generateBtn">Mostrar 30 Preguntas Aleatorias</button>
+    <div id="questionsList"></div>
+
+    <script>
+        const todasPreguntas = [
+            {q: "Capital de Francia?", a: "París"},
+            {q: "2 + 2?", a: "4"},
+            {q: "Color del cielo?", a: "Azul"},
+            {q: "Capital de España?", a: "Madrid"},
+            {q: "5 * 3?", a: "15"},
+            {q: "Planeta más cercano al Sol?", a: "Mercurio"},
+            {q: "Lenguaje de Android?", a: "Java"},
+            {q: "Capital de Alemania?", a: "Berlín"},
+            {q: "10 / 2?", a: "5"},
+            {q: "Animal que ladra?", a: "Perro"},
+            {q: "Río más largo del mundo?", a: "Nilo"},
+            {q: "¿Qué día sigue al lunes?", a: "Martes"},
+            {q: "Moneda de Japón?", a: "Yen"},
+            {q: "Capital de Italia?", a: "Roma"},
+            {q: "7 - 3?", a: "4"},
+            {q: "Color de la nieve?", a: "Blanco"},
+            {q: "Idioma de Brasil?", a: "Portugués"},
+            {q: "Capital de México?", a: "Ciudad de México"},
+            {q: "3 * 6?", a: "18"},
+            {q: "Animal que maúlla?", a: "Gato"},
+            {q: "Mes que viene después de junio?", a: "Julio"},
+            {q: "Capital de Argentina?", a: "Buenos Aires"},
+            {q: "Número de continentes?", a: "7"},
+            {q: "Lenguaje de la web?", a: "JavaScript"},
+            {q: "Capital de Canadá?", a: "Ottawa"},
+            {q: "5 + 7?", a: "12"},
+            {q: "Animal que vuela?", a: "Águila"},
+            {q: "Color de los limones?", a: "Amarillo"},
+            {q: "Río que atraviesa Egipto?", a: "Nilo"},
+            {q: "Capital de Rusia?", a: "Moscú"},
+            {q: "Capital de China?", a: "Pekín"},
+            {q: "10 * 10?", a: "100"},
+            {q: "Color de los tomates?", a: "Rojo"},
+            {q: "Lengua oficial de Francia?", a: "Francés"},
+            {q: "Planeta más grande?", a: "Júpiter"},
+            {q: "Capital de Reino Unido?", a: "Londres"},
+            {q: "2 + 3 * 2?", a: "8"},
+            {q: "Animal que hace 'muuu'?", a: "Vaca"},
+            {q: "Río que atraviesa Londres?", a: "Tamesis"},
+            {q: "Capital de Egipto?", a: "El Cairo"},
+            {q: "Número de días en febrero (no bisiesto)?", a: "28"},
+            {q: "Color de la sandía por dentro?", a: "Rojo"},
+            {q: "Lenguaje de Android moderno?", a: "Kotlin"},
+            {q: "Capital de Japón?", a: "Tokio"},
+            {q: "5 * 5?", a: "25"},
+            {q: "Animal que hace 'oinc oinc'?", a: "Cerdo"},
+            {q: "Río que atraviesa París?", a: "Sena"},
+            {q: "Capital de Australia?", a: "Canberra"},
+            {q: "Número de meses en un año?", a: "12"},
+            {q: "Color del oro?", a: "Amarillo"},
+            {q: "Lengua oficial de México?", a: "Español"},
+            {q: "Capital de India?", a: "Nueva Delhi"},
+            {q: "12 / 4?", a: "3"},
+            {q: "Animal que hace 'kikirikí'?", a: "Gallo"},
+            {q: "Río que atraviesa Roma?", a: "Tíber"},
+            {q: "Capital de Grecia?", a: "Atenas"},
+            {q: "Número de patas de una araña?", a: "8"},
+            {q: "Color del cielo al atardecer?", a: "Naranja"},
+            {q: "Lengua oficial de Italia?", a: "Italiano"},
+            {q: "Capital de Portugal?", a: "Lisboa"},
+            {q: "7 * 7?", a: "49"},
+            {q: "Animal que hace 'bramido'?", a: "Ciervo"},
+            {q: "Río que atraviesa Moscú?", a: "Moscova"},
+            {q: "Capital de Sudáfrica?", a: "Pretoria"},
+            {q: "Número de océanos?", a: "5"},
+            {q: "Color de la zanahoria?", a: "Naranja"},
+            {q: "Lengua oficial de Canadá?", a: "Inglés y Francés"},
+            {q: "Capital de Noruega?", a: "Oslo"},
+            {q: "9 * 9?", a: "81"},
+            {q: "Animal que hace 'croac'?", a: "Rana"},
+            {q: "Río que atraviesa Berlín?", a: "Spree"},
+            {q: "Capital de Suecia?", a: "Estocolmo"},
+            {q: "Número de planetas en el sistema solar?", a: "8"},
+            {q: "Color de la lechuga?", a: "Verde"},
+            {q: "Lengua oficial de Rusia?", a: "Ruso"},
+            {q: "Capital de Polonia?", a: "Varsovia"},
+            {q: "6 * 6?", a: "36"},
+            {q: "Animal que hace 'bzzz'?", a: "Abeja"},
+            {q: "Río que atraviesa Budapest?", a: "Danubio"},
+            {q: "Capital de Finlandia?", a: "Helsinki"},
+            {q: "Número de continentes en la Tierra?", a: "7"},
+            {q: "Color de los plátanos?", a: "Amarillo"},
+            {q: "Lengua oficial de Alemania?", a: "Alemán"},
+            {q: "Capital de Bélgica?", a: "Bruselas"},
+            {q: "8 * 8?", a: "64"},
+            {q: "Animal que hace 'grrr'?", a: "León"},
+            {q: "Río que atraviesa Madrid?", a: "Manzanares"},
+            {q: "Capital de Turquía?", a: "Ankara"},
+            {q: "Número de segundos en un minuto?", a: "60"},
+            {q: "Color de las fresas?", a: "Rojo"},
+            {q: "Lengua oficial de China?", a: "Chino mandarín"},
+            {q: "Capital de Perú?", a: "Lima"},
+            {q: "11 + 11?", a: "22"},
+            {q: "Animal que hace 'guau'?", a: "Perro"},
+            {q: "Río que atraviesa Budapest?", a: "Danubio"},
+            {q: "Capital de Chile?", a: "Santiago"},
+            {q: "Número de horas en un día?", a: "24"},
+            {q: "Color de los tomates cherry?", a: "Rojo"},
+            {q: "Lengua oficial de Argentina?", a: "Español"},
+            {q: "Capital de Colombia?", a: "Bogotá"},
+            {q: "15 / 3?", a: "5"},
+            {q: "Animal que hace 'cuac'?", a: "Pato"},
+            {q: "Río que atraviesa París?", a: "Sena"},
+            {q: "Capital de Venezuela?", a: "Caracas"},
+            {q: "Número de minutos en una hora?", a: "60"},
+            {q: "Color de la mantequilla?", a: "Amarillo"},
+            {q: "Lengua oficial de Egipto?", a: "Árabe"},
+            {q: "Capital de Marruecos?", a: "Rabat"},
+            {q: "16 - 4?", a: "12"},
+            {q: "Animal que hace 'hiss'?", a: "Serpiente"},
+            {q: "Río que atraviesa Londres?", a: "Tamesis"},
+            {q: "Capital de Corea del Sur?", a: "Seúl"},
+            {q: "Número de meses en un año?", a: "12"},
+            {q: "Color del brócoli?", a: "Verde"},
+            {q: "Lengua oficial de Grecia?", a: "Griego"},
+            {q: "Capital de Dinamarca?", a: "Copenhague"},
+            {q: "17 + 3?", a: "20"},
+            {q: "Animal que hace 'ñam'?", a: "Cerdo"},
+            {q: "Río que atraviesa Egipto?", a: "Nilo"},
+            {q: "Capital de Islandia?", a: "Reikiavik"},
+            {q: "Número de dientes en un adulto?", a: "32"},
+            {q: "Color del cacao?", a: "Marrón"},
+            {q: "Lengua oficial de India?", a: "Hindi e Inglés"},
+            {q: "Capital de Pakistán?", a: "Islamabad"},
+            {q: "18 / 2?", a: "9"},
+            {q: "Animal que hace 'cuac cuac'?", a: "Pato"},
+            {q: "Río que atraviesa Roma?", a: "Tíber"},
+            {q: "Capital de Malasia?", a: "Kuala Lumpur"}
+        ];
+        for (let i = 1; i <= 100; i++) {
+            todasPreguntas.push({q: `Pregunta ${i}?`, a: `Respuesta ${i}`});
+        }
+
+        function seleccionarAleatorias(array, cantidad) {
+            const copia = [...array];
+            const seleccionadas = [];
+            for (let i = 0; i < cantidad; i++) {
+                const index = Math.floor(Math.random() * copia.length);
+                seleccionadas.push(copia.splice(index, 1)[0]);
+            }
+            return seleccionadas;
+        }
+
+        function mostrarPreguntas() {
+            // Ocultar botón
+            document.getElementById("generateBtn").style.display = "none";
+
+            const seleccionadas = seleccionarAleatorias(todasPreguntas, 30);
+            const container = document.getElementById("questionsList");
+            container.innerHTML = "";
+
+            // Crear 2 columnas
+            const columnas = [];
+            for (let i = 0; i < 2; i++) {
+                const col = document.createElement("div");
+                col.classList.add("column");
+                container.appendChild(col);
+                columnas.push(col);
+            }
+
+            // Distribuir 15 preguntas por columna
+            seleccionadas.forEach((p, index) => {
+                const div = document.createElement("div");
+                div.classList.add("question");
+                div.innerHTML = `<b>${index + 1}. ${p.q}</b><div class="answer">${p.a}</div>`;
+                const columnaIndex = Math.floor(index / 15); // 15 preguntas por columna
+                columnas[columnaIndex].appendChild(div);
+            });
+        }
+
+        document.getElementById("generateBtn").addEventListener("click", mostrarPreguntas);
+    </script>
+</body>
+</html>
